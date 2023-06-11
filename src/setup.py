@@ -41,6 +41,11 @@ try:
 except:
     print('warning: preprocessing dependency "Pillow" is not installed')
 
+try:
+    import dataretrieval
+except:
+    print('warning: preprocessing dependency "dataretrieval" is not installed')
+
 import os, sys, setuptools
 
 from numpy.distutils.core import Extension, setup
