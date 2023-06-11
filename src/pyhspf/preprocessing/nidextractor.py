@@ -1,7 +1,7 @@
 # nidextractor.py
 #
 # David J. Lampert, PhD, PE
-# last uptdated: 04/03/2023
+# last uptdated: 06/11/2023
 # Purpose: Contains the NIDExtractor class to download data from the National
 # Inventory of Dams and then extract the dams for a given HUC8.
 
@@ -19,6 +19,11 @@ class NIDExtractor:
 
         self.NID     = NID
         self.website = website
+        # this is a bit of a hack to generate a projection file for the
+        #   created dam shapefile; a more elegant solution would be to
+        #   move away from PyShp and use a library that can handle
+        #   projections natively
+        self.prj = r'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]]'
 
         if not os.path.isdir(NID):
 
@@ -134,6 +139,10 @@ class NIDExtractor:
 
             # write to the file
             w.close()
+
+            # write the projection file
+            with open('{}.prj'.format(self.source), 'w') as f:
+                f.write(self.prj)
 
     def extract_bbox(self, bbox, output, verbose = True):
         """Extracts the NID dam locations for a watershed from the dam 
